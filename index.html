@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAUNCHPAD - The Final Frontier</title>
+    <!-- Fonts: Space Grotesk for headings, Inter for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@300;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Color Palette */
+            --bg-base: #0a0e1a;
+            --accent-orange: #e8622b;
+            --accent-teal: #2ec4b6;
+            --text-cream: #f0e6d3;
+            --text-dark: #05070a;
+            
+            /* Fonts */
+            --font-heading: 'Space Grotesk', sans-serif;
+            --font-body: 'Inter', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-cream);
+            font-family: var(--font-body);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Subtle retro grain/noise texture */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Typography utility */
+        h1, h2, h3, .heading-font {
+            font-family: var(--font-heading);
+            text-transform: uppercase;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            border-bottom: 1px solid rgba(240, 230, 211, 0.1);
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.75rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: '';
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-orange);
+            border-radius: 50%;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.25em;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -4px;
+            left: 0;
+            background-color: var(--accent-teal);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* --- Hero Section --- */
+        .hero-section {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .hero-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(10, 14, 26, 0.4) 0%, rgba(10, 14, 26, 0.8) 100%);
+            z-index: 2;
+        }
+
+        /* Decorative thin lines overlay */
+        .hero-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 3;
+            pointer-events: none;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 0 2rem;
+            max-width: 1200px;
+        }
+
+        .hero-title {
+            display: flex;
+            flex-direction: column;
+            line-height: 0.9;
+            margin-bottom: 2rem;
+        }
+
+        .title-top {
+            font-weight: 300;
+            font-size: clamp(3rem, 6vw, 5rem);
+            letter-spacing: 0.1em;
+            color: var(--accent-teal);
+        }
+
+        .title-bottom {
+            font-weight: 900;
+            font-size: clamp(5rem, 12vw, 10rem);
+            letter-spacing: 0.02em;
+            text-shadow: 4px 4px 0 rgba(232, 98, 43, 0.5);
+        }
+
+        .hero-tagline {
+            font-family: var(--font-body);
+            font-weight: 600;
+            font-size: clamp(1rem, 1.5vw, 1.25rem);
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            margin-bottom: 3.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .hero-tagline::before,
+        .hero-tagline::after {
+            content: '';
+            display: block;
+            width: 40px;
+            height: 1px;
+            background-color: var(--accent-teal);
+            opacity: 0.6;
+        }
+
+        /* Retro mission badge CTA */
+        .cta-btn {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-weight: 700;
+            font-size: 1.1rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            padding: 1.25rem 3rem;
+            background-color: var(--text-cream);
+            color: var(--text-dark);
+            border-radius: 50px;
+            /* Badge-like shape */
+            clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid var(--accent-orange);
+            box-shadow: 0 0 20px rgba(232, 98, 43, 0.3), inset 0 0 10px rgba(232, 98, 43, 0.2);
+            text-decoration: none;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 5px,
+                rgba(0,0,0,0.03) 5px,
+                rgba(0,0,0,0.03) 10px
+            );
+        }
+
+        .cta-btn:hover {
+            background-color: var(--accent-orange);
+            color: var(--text-cream);
+            box-shadow: 0 0 30px rgba(232, 98, 43, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* Angular divider */
+        .divider {
+            width: 100%;
+            height: 40px;
+            background-color: var(--accent-orange);
+            clip-path: polygon(0 0, 100% 100%, 100% 0);
+            margin-top: -1px;
+        }
+
+        /* --- Features Section --- */
+        .features-section {
+            padding: 6rem 4rem;
+            position: relative;
+        }
+
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(46, 196, 182, 0.2);
+            padding: 3rem 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 10px;
+            height: 100%;
+            background-color: var(--accent-teal);
+            opacity: 0.5;
+            transition: width 0.3s ease, opacity 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(46, 196, 182, 0.5);
+            box-shadow: 0 0 30px rgba(46, 196, 182, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-card:hover::before {
+            width: 100%;
+            opacity: 0.05;
+        }
+        
+        /* Second card alternative styling */
+        .feature-card:nth-child(2) {
+            border-color: rgba(232, 98, 43, 0.2);
+        }
+        .feature-card:nth-child(2)::before {
+            background-color: var(--accent-orange);
+        }
+        .feature-card:nth-child(2):hover {
+            border-color: rgba(232, 98, 43, 0.5);
+            box-shadow: 0 0 30px rgba(232, 98, 43, 0.1);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--accent-teal);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+        
+        .feature-card:nth-child(2) .card-icon {
+            color: var(--accent-orange);
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card-desc {
+            color: rgba(240, 230, 211, 0.7);
+            font-size: 0.95rem;
+        }
+
+        /* --- Footer --- */
+        footer {
+            padding: 3rem 4rem;
+            border-top: 1px solid rgba(240, 230, 211, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: rgba(240, 230, 211, 0.5);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-links a:hover {
+            color: var(--text-cream);
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 900px) {
+            nav {
+                padding: 1.5rem 2rem;
+            }
+            .nav-links {
+                display: none; /* simple hidden for mobile, could add menu button */
+            }
+            .cards-container {
+                grid-template-columns: 1fr;
+            }
+            .features-section {
+                padding: 4rem 2rem;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .hero-title .title-top {
+                font-size: 2rem;
+            }
+            .hero-title .title-bottom {
+                font-size: 3.5rem;
+            }
+            .hero-tagline {
+                font-size: 0.8rem;
+                letter-spacing: 0.2em;
+            }
+            footer {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo heading-font">LAUNCHPAD</div>
+        <ul class="nav-links heading-font">
+            <li><a href="#">MISSIONS</a></li>
+            <li><a href="#">CREW</a></li>
+            <li><a href="#">TRANSMISSIONS</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <img src="images/hero.jpg" alt="Rocket Launch" class="hero-image">
+        <div class="hero-overlay"></div>
+        <div class="hero-grid"></div>
+        
+        <div class="hero-content">
+            <h1 class="hero-title heading-font">
+                <span class="title-top">THE</span>
+                <span class="title-bottom">FINAL FRONTIER</span>
+            </h1>
+            <p class="hero-tagline">HUMANITY'S NEXT CHAPTER BEGINS HERE</p>
+            <a href="#missions" class="cta-btn">BEGIN MISSION &rarr;</a>
+        </div>
+    </div>
+
+    <!-- Divider -->
+    <div class="divider"></div>
+
+    <!-- Features Section -->
+    <section class="features-section" id="missions">
+        <div class="cards-container">
+            
+            <div class="feature-card">
+                <div class="card-icon">✦</div>
+                <h3 class="card-title heading-font">Deep Space Navigation</h3>
+                <p class="card-desc">Advanced orbital mechanics computational systems developed initially in 1968, plotting courses beyond the outer rims.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="card-icon">◉</div>
+                <h3 class="card-title heading-font">Lunar Colony Alpha</h3>
+                <p class="card-desc">The first sustainable off-world settlement, established to support long-duration exploratory crew deployments.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="card-icon">▲</div>
+                <h3 class="card-title heading-font">Project Starlight</h3>
+                <p class="card-desc">Classified interstellar propulsion initiative aimed at reaching neighboring solar systems within a single generation.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="copyright">&copy; 2026 LAUNCHPAD</div>
+        <div class="footer-links">
+            <a href="#">Priority Access</a>
+            <a href="#">Declassified Archival</a>
+            <a href="#">Comms Log</a>
+        </div>
+    </footer>
+
+</body>
+</html>
